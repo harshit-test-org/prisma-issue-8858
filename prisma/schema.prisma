@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model thing {
+  clientId  Int     @db.Integer
+  uuid      String  @default(uuid()) @db.Uuid
+  otherUuid String? @db.Uuid
+
+  otherObject        thing? @relation(name: "thingTothing", fields: [clientId, otherUuid], references: [clientId, uuid])
+  otherObjectReverse thing? @relation(name: "thingTothing")
+
+  @@id([clientId, uuid])
+}
